@@ -1,16 +1,21 @@
 # dsh-token-telemetry
 
-A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (`dsh`) plugin that adds a
-per-session **token throughput telemetry** panel. It mounts a "Token 遥测" tab into the
-conversation view and shows, from **real harness data**:
+A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (`dsh`) plugin — part of the
+`dsh-plugin-*` family — that surfaces **token throughput telemetry** from real harness data, in
+three layers:
 
-- **Live dual-line TPS curve** — thinking (`reasoning`) vs output (`text`) tokens/s over 250 ms
-  buckets, with the running peak.
-- **Settlement cards** — decode TPS, model TPS, mean first-token latency (TTFT), and total
-  tokens.
-- **Whole-session footer** — turns / steps / tool time / cache-read tokens.
+- **Per-turn inline card** (`conversation.chat.turnTail`) — under each completed turn, a compact
+  row: thinking / output tokens, throughput tok/s, wall time, a mini dual-line sparkline, and a
+  "明细" toggle that expands a per-step table (step · think · out · duration · tok/s · tool ·
+  state).
+- **Aggregate view** (`conversation.view` tab "Token 遥测") — full thinking-vs-output TPS curve,
+  settlement cards (decode TPS, mean TTFT, total tokens), and a cross-turn overview table.
+- **Live counters** — the curve and numbers recompute every 250 ms from the streaming events, so
+  they animate during a turn (the durable `sessionStats`/`tokenUsage` projections only tick at
+  `step/end`).
 
-Everything is read from the harness's own durable surfaces — no simulated data:
+All figures come from the harness's own durable surfaces — no simulated data:
+
 
 | Panel field | Source |
 |---|---|
@@ -53,11 +58,16 @@ resolved by `require("react")`), so no bundler is required to build it.
 
 ## Verified
 
-Tested against a clean `dsh web` instance (`@deepseek-ai/dsh@0.1.7-alpha.1`) with two real turns
-on `step-5-preview`:
+Tested against a clean `dsh web` instance (`@deepseek-ai/dsh@0.1.7-alpha.1`) with real
+StepFun `step-5-preview` turns:
 
-- Settlement matched dsh's native stats pill exactly (e.g. **74 tok/s**, **11.9K tok**).
-- Live curve rendered from the real streams (peak ~208 tok/s across 912 buckets).
+- **Aggregate + live counters: confirmed against real data.** Settlement matched dsh's native stats
+  pill exactly (74 tok/s, 11.9K tok), and a multi-step agent task (a Gomoku build) produced a
+  correct per-step cross-turn table (13,427 output tok / 132,814 input+cache / ~92 tok/s avg).
+- **Per-turn inline cards: implemented; not yet visually confirmed** in this build — the aggregate
+  and tail cards share one refcounted `eventSource` subscription, and the shared aggregation is
+  verified via the aggregate view; the turnTail rendering itself still needs a visual pass.
+
 
 ## Notes / limitations
 
