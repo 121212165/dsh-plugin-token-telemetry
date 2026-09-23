@@ -64,9 +64,9 @@ StepFun `step-5-preview` turns:
 - **Aggregate + live counters: confirmed against real data.** Settlement matched dsh's native stats
   pill exactly (74 tok/s, 11.9K tok), and a multi-step agent task (a Gomoku build) produced a
   correct per-step cross-turn table (13,427 output tok / 132,814 input+cache / ~92 tok/s avg).
-- **Per-turn inline cards: implemented; not yet visually confirmed** in this build — the aggregate
-  and tail cards share one refcounted `eventSource` subscription, and the shared aggregation is
-  verified via the aggregate view; the turnTail rendering itself still needs a visual pass.
+- **Per-turn inline cards and the trajectory ribbon render** with real per-step curves, colored by
+  phase (thinking / output / tool) and sized by wall time — confirmed via headless screenshots.
+  Phantom turn-0 rows and empty step blocks are filtered out.
 
 
 ## Notes / limitations
