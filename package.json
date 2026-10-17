@@ -36,6 +36,11 @@
   },
   "license": "MIT",
   "sideEffects": false,
+  "scripts": {
+    "typecheck": "node --experimental-strip-types -e \"0\"",
+    "test": "node --test --experimental-strip-types \"test/*.test.ts\"",
+    "check": "npm run typecheck && npm test"
+  },
   "engines": {
     "node": ">=22.18"
   },
