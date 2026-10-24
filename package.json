@@ -19,7 +19,9 @@
   "files": [
     "lib/index.js",
     "lib/client.js",
-    "lib/types/**/*.d.ts"
+    "lib/types/**/*.d.ts",
+    "lib",
+    "client"
   ],
   "dsh": {
     "client": {
@@ -39,7 +41,8 @@
   "scripts": {
     "typecheck": "node --experimental-strip-types -e \"0\"",
     "test": "node --test --experimental-strip-types \"test/*.test.ts\"",
-    "check": "npm run typecheck && npm test"
+    "check": "npm run typecheck && npm test",
+    "prepublishOnly": "npm run check"
   },
   "engines": {
     "node": ">=22.18"
@@ -47,5 +50,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/121212165/dsh-plugin-token-telemetry.git"
-  }
+  },
+  "keywords": [
+    "dsh-plugin"
+  ]
 }
