@@ -31,6 +31,11 @@
         "@deepseek-ai/dsh-client-ui-session"
       ],
       "immediately": true
+    },
+    "catalog": {
+      "category": "钱与用量",
+      "blurb": "token 遥测 web 面板（官方 useProjection 模式示范）",
+      "entries": "web 面板"
     }
   },
   "peerDependencies": {
